@@ -42,3 +42,26 @@ page 27 do
   assert_equal('«14»', ex.inspect)
 end
 
+require 'stringio'
+def capture_output
+  output = ""
+  return output, StringIO.new(output)
+end
+
+page 28 do
+  expr = Add.new(
+    Multiply.new(Number.new(1), Number.new(2)),
+    Multiply.new(Number.new(3), Number.new(4))
+  )
+  m = Machine.new(expr)
+
+  output, m.io = capture_output
+  m.run
+
+  assert_equal output, <<-EOF
+1 * 2 + 3 * 4
+2 + 3 * 4
+2 + 12
+14
+  EOF
+end

@@ -8,12 +8,12 @@ def refute(predicate)
   raise "nope"
 end
 
-def assert_equal(expected, actual)
-  return if expected == actual
+def assert_equal(a, b)
+  return if a == b
   raise <<-EOF
 
-Expected #{expected.inspect}
-to ==    #{actual.inspect}
+Expected #{a.inspect}
+to ==    #{b.inspect}
   EOF
 end
 
