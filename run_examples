@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+examples = File.join(File.expand_path(File.dirname(__FILE__)), *%w[examples chapter-*.rb])
+Dir.glob(examples) do |filename|
+  require filename
+end
+
+puts "yup"
