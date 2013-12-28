@@ -211,3 +211,41 @@ do-nothing, {:x=>«2», :y=>«5»}
     EOF
   end
 end
+
+page 40 do
+  m = Machine.new(
+    While.new(
+      LessThan.new( Variable.new(:x), Number.new(5) ),
+      Assign.new( :x, Multiply.new(Variable.new(:x), Number.new(3)) )
+    ),
+    { x: Number.new(1) }
+  )
+
+  capture_output_on(m) do |output|
+    m.run
+
+    assert_equal output, <<-EOF
+while (x < 5) { x = x * 3 }, {:x=>«1»}
+if (x < 5) { x = x * 3; while (x < 5) { x = x * 3 } } else { do-nothing }, {:x=>«1»}
+if (1 < 5) { x = x * 3; while (x < 5) { x = x * 3 } } else { do-nothing }, {:x=>«1»}
+if (true) { x = x * 3; while (x < 5) { x = x * 3 } } else { do-nothing }, {:x=>«1»}
+x = x * 3; while (x < 5) { x = x * 3 }, {:x=>«1»}
+x = 1 * 3; while (x < 5) { x = x * 3 }, {:x=>«1»}
+x = 3; while (x < 5) { x = x * 3 }, {:x=>«1»}
+do-nothing; while (x < 5) { x = x * 3 }, {:x=>«3»}
+while (x < 5) { x = x * 3 }, {:x=>«3»}
+if (x < 5) { x = x * 3; while (x < 5) { x = x * 3 } } else { do-nothing }, {:x=>«3»}
+if (3 < 5) { x = x * 3; while (x < 5) { x = x * 3 } } else { do-nothing }, {:x=>«3»}
+if (true) { x = x * 3; while (x < 5) { x = x * 3 } } else { do-nothing }, {:x=>«3»}
+x = x * 3; while (x < 5) { x = x * 3 }, {:x=>«3»}
+x = 3 * 3; while (x < 5) { x = x * 3 }, {:x=>«3»}
+x = 9; while (x < 5) { x = x * 3 }, {:x=>«3»}
+do-nothing; while (x < 5) { x = x * 3 }, {:x=>«9»}
+while (x < 5) { x = x * 3 }, {:x=>«9»}
+if (x < 5) { x = x * 3; while (x < 5) { x = x * 3 } } else { do-nothing }, {:x=>«9»}
+if (9 < 5) { x = x * 3; while (x < 5) { x = x * 3 } } else { do-nothing }, {:x=>«9»}
+if (false) { x = x * 3; while (x < 5) { x = x * 3 } } else { do-nothing }, {:x=>«9»}
+do-nothing, {:x=>«9»}
+    EOF
+  end
+end
