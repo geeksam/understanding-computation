@@ -75,3 +75,28 @@ false
     EOF
   end
 end
+
+page 30 do
+  v = Variable.new(:x)
+  assert v.reducible?
+  assert_equal "«x»", v.inspect
+end
+
+page 31 do
+  m = Machine.new(
+    Add.new( Variable.new(:x), Variable.new(:y) ),
+    { x: Number.new(3), y: Number.new(4) }
+  )
+
+  capture_output_on(m) do |output|
+    m.run
+
+    assert_equal output, <<-EOF
+x + y
+3 + y
+3 + 4
+7
+    EOF
+  end
+end
+
