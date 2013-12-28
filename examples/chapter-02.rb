@@ -59,3 +59,19 @@ page 28 do
     EOF
   end
 end
+
+page 29 do
+  m = Machine.new(
+    LessThan.new( Number.new(5), Add.new( Number.new(2), Number.new(2) ) )
+  )
+
+  capture_output_on(m) do |output|
+    m.run
+
+    assert_equal output, <<-EOF
+5 < 2 + 2
+5 < 4
+false
+    EOF
+  end
+end
