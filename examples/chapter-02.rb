@@ -126,3 +126,20 @@ page 35 do
   assert_equal( { x: Number.new(3) }, environment )
 end
 
+page 36 do
+  m = Machine.new(
+    Assign.new( :x, Add.new( Variable.new(:x), Number.new(1) ) ),
+    { x: Number.new(2) }
+  )
+
+  capture_output_on(m) do |output|
+    m.run
+
+    assert_equal output, <<-EOF
+x = x + 1, {:x=>«2»}
+x = 2 + 1, {:x=>«2»}
+x = 3, {:x=>«2»}
+do-nothing, {:x=>«3»}
+    EOF
+  end
+end
