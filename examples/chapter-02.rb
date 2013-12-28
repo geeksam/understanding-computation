@@ -100,3 +100,10 @@ x + y
   end
 end
 
+page 33 do
+  a = DoNothing.new
+  b = DoNothing.new
+  assert_equal a, b
+  refute a.reducible?
+end
+
