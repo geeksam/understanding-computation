@@ -143,3 +143,47 @@ do-nothing, {:x=>«3»}
     EOF
   end
 end
+
+page 37 do
+  m = Machine.new(
+    If.new(
+      Variable.new(:x),
+      Assign.new(:y, Number.new(1)),
+      Assign.new(:y, Number.new(2))
+    ),
+    { x: Boolean.new(true) }
+  )
+
+  capture_output_on(m) do |output|
+    m.run
+
+    assert_equal output, <<-EOF
+if (x) { y = 1 } else { y = 2 }, {:x=>«true»}
+if (true) { y = 1 } else { y = 2 }, {:x=>«true»}
+y = 1, {:x=>«true»}
+do-nothing, {:x=>«true», :y=>«1»}
+    EOF
+  end
+end
+
+page 37 do
+  m = Machine.new(
+    If.new(
+      Variable.new(:x),
+      Assign.new(:y, Number.new(1)),
+      DoNothing.new
+    ),
+    { x: Boolean.new(true) }
+  )
+
+  capture_output_on(m) do |output|
+    m.run
+
+    assert_equal output, <<-EOF
+if (x) { y = 1 } else { do-nothing }, {:x=>«true»}
+if (true) { y = 1 } else { do-nothing }, {:x=>«true»}
+y = 1, {:x=>«true»}
+do-nothing, {:x=>«true», :y=>«1»}
+    EOF
+  end
+end
