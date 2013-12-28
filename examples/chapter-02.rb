@@ -107,3 +107,22 @@ page 33 do
   refute a.reducible?
 end
 
+page 35 do
+  statement = Assign.new( :x, Add.new(Variable.new(:x), Number.new(1)) )
+  assert_equal "«x = x + 1»", statement.inspect
+  assert statement.reducible?
+  environment = { x: Number.new(2) }
+
+  statement, environment = statement.reduce(environment)
+  assert_equal "«x = 2 + 1»", statement.inspect
+  assert_equal( { x: Number.new(2) }, environment )
+
+  statement, environment = statement.reduce(environment)
+  assert_equal "«x = 3»", statement.inspect
+  assert_equal( { x: Number.new(2) }, environment )
+
+  statement, environment = statement.reduce(environment)
+  assert_equal "«do-nothing»", statement.inspect
+  assert_equal( { x: Number.new(3) }, environment )
+end
+
