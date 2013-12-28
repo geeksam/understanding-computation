@@ -16,12 +16,4 @@ end
 # My own additions for testing...
 class Machine
   include IO_Attr
-
-  def run
-    while expression.reducible?
-      io.puts expression
-      step
-    end
-    io.puts expression
-  end
 end
