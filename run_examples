@@ -1,8 +1,15 @@
 #!/usr/bin/env ruby
 
-examples = File.join(File.expand_path(File.dirname(__FILE__)), *%w[examples chapter-*.rb])
-Dir.glob(examples) do |filename|
-  require filename
+require 'pathname'
+
+def require_all(glob_expr)
+  here = Pathname.new( File.expand_path(File.dirname(__FILE__)) )
+  Dir.glob(here.join(glob_expr)) do |filename|
+    require filename
+  end
 end
+
+require_all 'helpers/*.rb'
+require_all 'examples/*.rb'
 
 puts "yup"

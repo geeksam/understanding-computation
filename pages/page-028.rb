@@ -13,14 +13,9 @@ class Machine < Struct.new(:expression)
 end
 
 
-# My own additions...
+# My own additions for testing...
 class Machine
-  def io=(new_io)
-    @io = new_io
-  end
-  def io
-    @io ||= STDOUT
-  end
+  include IO_Attr
 
   def run
     while expression.reducible?
